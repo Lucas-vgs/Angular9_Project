@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Ingredient } from 'src/app/shared/Ingredient.model';
-import { ShoppingListService } from '../shopping-list.service';
+import { RecipesListService } from '../recipes-list.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-list-edit',
-  templateUrl: './shopping-list-edit.component.html',
-  styleUrls: ['./shopping-list-edit.component.css']
+  templateUrl: './recipes-list-edit.component.html',
+  styleUrls: ['./recipes-list-edit.component.css']
 })
-export class ShoppingListEditComponent implements OnInit, OnDestroy {
+export class RecipesListEditComponent implements OnInit, OnDestroy {
 
   @ViewChild('f') form: NgForm;
   sub: Subscription;
@@ -17,7 +17,7 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
   editMode = false;
   editedIngredient: Ingredient;
 
-  constructor(private service: ShoppingListService) { }
+  constructor(private service: RecipesListService) { }
 
   ngOnInit(): void {
     this.sub = this.service.editing.subscribe(
@@ -36,7 +36,7 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
 
   addClicked(f: NgForm) {
     const value = f.value;
-    let ing = new Ingredient(value.name, value.amount);
+    let ing = new Ingredient(value.name, value.amount, value.unit);
     if (this.editMode) {
       this.service.updateIngredient(this.editIndex, ing);
     }

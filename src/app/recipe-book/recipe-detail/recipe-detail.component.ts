@@ -1,12 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
-import { RecipeBookService } from '../recipe-book.service';
+import { RecipeBookService } from '../../shared/Services/recipe-book.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { animate, keyframes, query, stagger, style, transition, trigger } from '@angular/animations';
+import { DataStorageService } from 'src/app/shared/Services/data-storage.service';
 
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.css']
+  styleUrls: ['./recipe-detail.component.css'],
+  animations: [
+    trigger('listAnimation', [
+      transition('* => *', [
+        query(':enter', style({ opacity: 0 }), { optional: true }),
+        query(':enter', stagger('50ms', [animate('0.1s ease-in', keyframes([
+          style({ opacity: 0, transform: 'translateY(-75px)', offset: 0 }),
+          style({ opacity: 0.5, transform: 'translateY(35px)', offset: 0.1 }),
+          style({ opacity: 1, transform: 'translateY(0px)', offset: 1 }),
+        ]))]), {optional:true})
+      ])
+    ])
+  ]
 })
 export class RecipeDetailComponent implements OnInit {
 
@@ -14,7 +28,8 @@ export class RecipeDetailComponent implements OnInit {
   id: number;
 
   constructor(
-    private service: RecipeBookService,
+    private recipeService: RecipeBookService,
+    private dataService: DataStorageService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -23,22 +38,19 @@ export class RecipeDetailComponent implements OnInit {
     this.route.params.subscribe(
       (param: Params) => {
         this.id = +param['id']; // id é a mesma propriedade setada no app-routing. Na Child
-        this.recipe = this.service.getRecipeById(this.id)
+        this.recipe = this.recipeService.getPersonalRecipeById(this.id)
       }
     )
   }
 
-  sendIngredients() {
-    this.service.sendIngredients(this.recipe.ingredients);
-  }
-
   toEdit() {
-    this.router.navigate( ['edit'], { relativeTo: this.route });
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
-  onDelete(){
-    this.service.deleteRecipe(this.id);
-    this.router.navigate(['recipes'])
+  onDelete() {
+    this.recipeService.deletePersonalRecipe(this.id);
+    this.router.navigate(['recipes']);
+    this.dataService.storeRecipes();
   }
 
 }

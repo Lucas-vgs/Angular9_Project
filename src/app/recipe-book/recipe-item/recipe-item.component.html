@@ -1,9 +1,15 @@
-<a  class="list-group-item clearfix" role="button" [routerLink]="[index]" routerLinkActive="active">
-    <div class="pull-left">
-      <h4 class="list-group-item-heading">{{element.name}}</h4>
-      <p class="list-group-item-text">{{element.description}}</p>
-    </div>
-    <span class="pull-right">
-      <img src="{{element.imagePath}}" alt="{{element.name}}" class="img-responsive" style="max-height: 60px;">
-    </span>
-  </a>
+<a class="list-group-item clearfix" role="button" [routerLink]="[index]" routerLinkActive="active"
+  style="margin-bottom: 2px;">
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{element.name}}</h4>
+    <p class="list-group-item-text">{{element.description}}</p>
+    <p class="list-group-item-text" style="opacity: 0.3; font-size: smaller;">
+      <span *ngIf="element.isPublic">Public</span>
+      <span *ngIf="!element.isPublic">Private</span>
+    </p>
+    <figure class="public-strip" [ngStyle]="{background: getColor()}"></figure>
+  </div>
+  <span class="pull-right">
+    <img src="{{element.imagePath}}" alt="{{element.name}}" class="img-responsive" style="max-height: 60px;">
+  </span>
+</a>

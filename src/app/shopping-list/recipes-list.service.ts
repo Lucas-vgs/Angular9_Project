@@ -5,14 +5,12 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ShoppingListService {
+export class RecipesListService {
 
   editing = new Subject<number>();
   ingredientsChanged = new Subject<Ingredient[]>();
   private ingredients: Ingredient[] = [
-    new Ingredient('Apples', 5),
-    new Ingredient('Tomatoes', 10),
-    new Ingredient('Oranges', 2)
+
   ];
 
 

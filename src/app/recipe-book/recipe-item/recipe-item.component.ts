@@ -11,4 +11,7 @@ export class RecipeItemComponent {
 
   @Input() element: Recipe;
   @Input() index: number;
+  getColor(){
+    return this.element.isPublic ? '#5cb85c' : '#ccc'
+  }
 }

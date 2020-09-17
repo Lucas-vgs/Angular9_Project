@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators'
 
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { RecipeBookService } from 'src/app/recipe-book/recipe-book.service';
+import { RecipeBookService } from 'src/app/shared/Services/recipe-book.service';
 import { Recipe } from 'src/app/recipe-book/models/recipe.model';
-import { map, tap, take, exhaustMap } from 'rxjs/operators'
-import { AuthService } from 'src/app/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataStorageService {
-
   constructor(
     private http: HttpClient,
     private recipesService: RecipeBookService,
-    private authService: AuthService
   ) { }
 
   storeRecipes() {
@@ -24,7 +21,6 @@ export class DataStorageService {
   }
 
   fetchData() {
-
     return this.http.get<Recipe[]>('https://ng-course-recipe-book-e6466.firebaseio.com/recipes.json')
       .pipe(
         map(recipes => {
@@ -32,7 +28,25 @@ export class DataStorageService {
             return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
           })
         }),
-        tap(recipes => { this.recipesService.setRecipes(recipes) }))
+        tap(recipes => {
+          this.recipesService.setRecipes(recipes);
+        }));
+  }
+  private newRecipe: Recipe[] = [];
+
+  fetchDataByEmail(email: string) {
+    this.newRecipe = [];
+    return this.http.get<Recipe[]>('https://ng-course-recipe-book-e6466.firebaseio.com/recipes.json')
+      .pipe(
+        map(recipes => {
+          return recipes.map(recipe => {
+            return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
+          })
+        }),
+        tap(recipes => {
+          recipes.forEach( recipe => { if(recipe.email === email) this.newRecipe.push(recipe)})
+          this.recipesService.setRecipes(this.newRecipe, email);
+        }));
   }
 
 }

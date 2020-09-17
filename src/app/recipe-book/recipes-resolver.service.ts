@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 
 import { DataStorageService } from '../shared/Services/data-storage.service';
 import { Recipe } from './models/recipe.model';
-import { RecipeBookService } from './recipe-book.service';
+import { RecipeBookService } from '../shared/Services/recipe-book.service';
 
 @Injectable({
   providedIn: 'root'

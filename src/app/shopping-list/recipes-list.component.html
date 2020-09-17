@@ -1,0 +1,33 @@
+<!-- Search Input-->
+<div class="s128">
+  <form>
+    <div class="inner-form">
+      <div class="row">
+        <div class="input-field first" id="first">
+          <input class="input" id="inputFocus" type="text" placeholder="Search by the recipe name" name="a"
+            [(ngModel)]="filteredStatus" />
+          <button class="clear" id="clear">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="row">
+
+  <div class="col-xs-12">
+    <ng-container  *ngFor="let rec of recipes  | filter: filteredStatus: 'name' let i= index">
+      <app-recipes-list-item [index]="i" [element]="rec" *ngIf="rec.isPublic"> </app-recipes-list-item>
+    </ng-container>
+    <div *ngIf="!(recipes | filter: filteredStatus: 'name')?.length" class="alert alert-warning">
+      <p> <strong>Ops! </strong>No data with that specification</p>
+    </div>
+  </div>
+</div>
